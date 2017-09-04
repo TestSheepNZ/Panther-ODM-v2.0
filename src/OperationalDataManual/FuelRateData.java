@@ -5,13 +5,35 @@ public class FuelRateData {
     private int acSpeed;
     private int acWeight;
     private double fuelUsagePerMin;
+    private Boolean validData;
 
     public FuelRateData(double height, double speed, double weight, double fuelPerMin) {
         acHeight = correctHeight(height);
         acSpeed = correctSpeed(speed);
         acWeight = correctWeight(weight);
+        validData = true;
 
         fuelUsagePerMin = fuelPerMin;
+    }
+    
+    public FuelRateData(String lineData)
+    {
+    	validData = false;
+    	
+    	String[] fuelData = lineData.split("\\|");
+    	double height = Double.parseDouble(fuelData[1]);
+    	double speed = Double.parseDouble(fuelData[2]);
+    	double weight = Double.parseDouble(fuelData[3]);
+    	double fuelPerMin = Double.parseDouble(fuelData[4]);
+    	
+    	if (height >= 0.0 && speed >= 400.0 && weight >= 6000.0 && fuelPerMin > 0.0)
+    	{
+            acHeight = correctHeight(height);
+            acSpeed = correctSpeed(speed);
+            acWeight = correctWeight(weight);
+            fuelUsagePerMin = fuelPerMin;
+            validData = true;    		
+    	}
     }
 
     public boolean dataMatch(double height, double speed, double weight) {
@@ -25,6 +47,10 @@ public class FuelRateData {
         }
 
         return matchVal;
+    }
+    
+    public Boolean getValidData(){
+    	return validData;
     }
 
     public double getFuelUsage() {

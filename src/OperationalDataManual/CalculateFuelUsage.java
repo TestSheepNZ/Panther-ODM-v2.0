@@ -1,7 +1,16 @@
 package OperationalDataManual;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class CalculateFuelUsage {
 
@@ -72,10 +81,38 @@ public class CalculateFuelUsage {
 
     // Set up fuel usage data ...
     private void initialiseFuelUsage() {
+    	int countData;
+    	
+        try {
+            File file = new File("./src/OperationalDataManual/fuel_data.txt");
+            FileReader fileReader = new FileReader(file);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            // FileWriter writeToFile = new FileWriter(file);
+            StringBuffer stringBuffer = new StringBuffer();
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                stringBuffer.append(line);
+                stringBuffer.append("\n");
+                FuelRateData lineData = new FuelRateData(line);
+                //Only add if correct
+                if(lineData.getValidData()) {
+                    fuelData.add(lineData);                	
+                }
 
+            }
+            fileReader.close();
+            System.out.println("Contents of file:");
+            System.out.println(stringBuffer.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    	
+    	
         // 400kt table
-        fuelData.add(new FuelRateData(100.0, 400.0, 7000.0, 26.2));
-        fuelData.add(new FuelRateData(500.0, 400.0, 7000.0, 23.8));
+        //fuelData.add(new FuelRateData("|8000.0| 400.0| 9000.0| 17.7|"));
+        //fuelData.add(new FuelRateData(100.0, 400.0, 7000.0, 26.2));
+        /*fuelData.add(new FuelRateData(500.0, 400.0, 7000.0, 23.8));
         fuelData.add(new FuelRateData(2000.0, 400.0, 7000.0, 21.8));
         fuelData.add(new FuelRateData(8000.0, 400.0, 7000.0, 16.5));
         fuelData.add(new FuelRateData(16000.0, 400.0, 7000.0, 12.3));
@@ -258,6 +295,6 @@ public class CalculateFuelUsage {
         fuelData.add(new FuelRateData(32000.0, 600.0, 14000.0, 18.3));
         fuelData.add(new FuelRateData(32000.0, 600.0, 15000.0, 19));
         fuelData.add(new FuelRateData(32000.0, 600.0, 16000.0, 19.6));
-
+*/
     }
 }
