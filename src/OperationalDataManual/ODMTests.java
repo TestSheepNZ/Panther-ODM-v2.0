@@ -135,29 +135,11 @@ public class ODMTests {
     }
 
     @Test
-    public void workedExampleWierd() {
-        AircraftManagement thisAircraft = new AircraftManagement();
-
-        // Add loadout - I fudged this to get the weigh in the example
-        thisAircraft.addA2AMissile(8);
-        thisAircraft.addDumbBomb(4);
-        thisAircraft.addExternalFuelTanks();
-
-        // Add some fuel
-        thisAircraft.addFuel(5000.0);
-
-        // Confirm all up weight 14,800kg
-        assertTrue("Aircraft weight should be 14,800 kg", 14800.0 == thisAircraft.getAllUpWeight());
-
-        // Climb to 20,000
-        System.out.println("Weight " + thisAircraft.getAllUpWeight());
-        thisAircraft.dive(20000.0);
-        System.out.println("Post dive weight " + thisAircraft.getAllUpWeight());
-
-        thisAircraft.climb(200.0);
-
-        System.out.println("Post climb weight " + thisAircraft.getAllUpWeight());
-
+    public void readValidDataLine () {
+        String dataStr = "|32000.0| 400.0| 9000.0| 7.3|";
+        FuelRateData fuelData = new FuelRateData(dataStr);
+        
+        assertTrue("Fuel data provided processed", fuelData.getValidData());
     }
-
+    
 }

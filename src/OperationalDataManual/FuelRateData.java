@@ -7,6 +7,7 @@ public class FuelRateData {
     private double fuelUsagePerMin;
     private Boolean validData;
 
+    @Deprecated
     public FuelRateData(double height, double speed, double weight, double fuelPerMin) {
         acHeight = correctHeight(height);
         acSpeed = correctSpeed(speed);
@@ -16,26 +17,45 @@ public class FuelRateData {
         fuelUsagePerMin = fuelPerMin;
     }
     
-    public FuelRateData(String lineData)
-    {
-    	validData = false;
+    public FuelRateData(String lineData) {
+    	double height = 0.0, speed = 0.0, weight = 0.0, fuelPerMin = 0.0;
+    	validData = true;
     	
     	String[] fuelData = lineData.split("\\|");
-    	double height = Double.parseDouble(fuelData[1]);
-    	double speed = Double.parseDouble(fuelData[2]);
-    	double weight = Double.parseDouble(fuelData[3]);
-    	double fuelPerMin = Double.parseDouble(fuelData[4]);
-    	
-    	if (height >= 0.0 && speed >= 400.0 && weight >= 6000.0 && fuelPerMin > 0.0)
+    	if (fuelData.length == 5) {
+	    	height = convertStringNumber(fuelData[1]);
+	    	speed = convertStringNumber(fuelData[2]);
+	    	weight = convertStringNumber(fuelData[3]);
+	    	fuelPerMin = convertStringNumber(fuelData[4]);
+    	} else {
+    		validData = false;
+    	}
+
+    	if ( validData.booleanValue() && height >= 0.0 && speed >= 400.0 && weight >= 6000.0 && fuelPerMin > 0.0)
     	{
             acHeight = correctHeight(height);
             acSpeed = correctSpeed(speed);
             acWeight = correctWeight(weight);
-            fuelUsagePerMin = fuelPerMin;
-            validData = true;    		
+            fuelUsagePerMin = fuelPerMin;  		
+    	}
+    	else
+    	{
+    		validData = false;
     	}
     }
 
+    private double convertStringNumber(String strNum) {
+        double retValue;
+        
+        try {
+            retValue = Double.parseDouble(strNum);
+        } catch (NumberFormatException e) {
+            validData = false;
+            return -1.0;
+        }
+        return retValue;
+    }
+    
     public boolean dataMatch(double height, double speed, double weight) {
         boolean matchVal;
 
