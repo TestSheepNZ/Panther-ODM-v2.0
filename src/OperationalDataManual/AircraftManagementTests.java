@@ -3,7 +3,7 @@ package OperationalDataManual;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-public class ODMTests {
+public class AircraftManagementTests {
 
     // Bah - I had compairing on doubles, gives true if within 0.01
     private boolean compareWithinTwoDecPlace(double n1, double n2) {
