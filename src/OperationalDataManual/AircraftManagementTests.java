@@ -5,11 +5,6 @@ import static org.junit.Assert.*;
 
 public class AircraftManagementTests {
 
-    // Bah - I had compairing on doubles, gives true if within 0.01
-    private boolean compareWithinTwoDecPlace(double n1, double n2) {
-        return 0.01 > Math.abs(n1 - n2) ? true : false;
-    }
-
     @Test
     public void reconPanther() {
         AircraftManagement thisAircraft = new AircraftManagement();
@@ -18,7 +13,7 @@ public class AircraftManagementTests {
         thisAircraft.addReconPod();
 
         // Aircraft Weight + equipment should be 6000 + 2000
-        assertTrue("Aircraft weight should be 6000 + 2000 kg", (6000 + 2000) == thisAircraft.getAllUpWeight());
+        assertEquals("Aircraft weight should be 6000 + 2000 kg", (6000 + 2000), thisAircraft.getAllUpWeight(), 0.01);
 
     }
 
@@ -31,12 +26,12 @@ public class AircraftManagementTests {
         thisAircraft.addExternalFuelTanks();
 
         // Aircraft Weight + equipment should be 6000 + 2600
-        assertTrue("Aircraft weight should be 6000 + 2600 kg", (6000 + 2600) == thisAircraft.getAllUpWeight());
+        assertEquals("Aircraft weight should be 6000 + 2600 kg", (6000 + 2600), thisAircraft.getAllUpWeight(), 0.01);
 
         // Now drop 2 bombs ... recalculate all up weight
         // Aircraft Weight + equipment should be 6000 + 1400
         thisAircraft.dropDumbBomb(2);
-        assertTrue("Aircraft weight should be 6000 + 1400 kg", (6000 + 1400) == thisAircraft.getAllUpWeight());
+        assertEquals("Aircraft weight should be 6000 + 1400 kg", (6000 + 1400), thisAircraft.getAllUpWeight(), 0.01);
     }
 
     @Test
@@ -48,15 +43,15 @@ public class AircraftManagementTests {
 
         // Climb to 30,000 - confirm that 300kg fuel is used
         thisAircraft.climb(30000);
-        assertTrue("300kg fuel used in climb", (300.0 == thisAircraft.getFuelUsed()));
+        assertEquals("300kg fuel used in climb", 300.0, thisAircraft.getFuelUsed(), 0.01);
 
         // Dive to 10,000
         thisAircraft.dive(10000);
-        assertTrue("No fuel used in dive", (0.0 == thisAircraft.getFuelUsed()));
+        assertEquals("No fuel used in dive", 0.0, thisAircraft.getFuelUsed(), 0.01);
 
         // Climb to 30,000 - confirm that 300kg fuel is used
         thisAircraft.climb(30000);
-        assertTrue("200kg fuel used in climb", (200.0 == thisAircraft.getFuelUsed()));
+        assertEquals("200kg fuel used in climb", 200.0, thisAircraft.getFuelUsed(), 0.01);
     }
 
     @Test
@@ -75,15 +70,15 @@ public class AircraftManagementTests {
         thisAircraft.climb(28000);
 
         // Confirm AUW is 12100 as in example
-        assertTrue("AUW is 12100", (12100 == thisAircraft.getAllUpWeight()));
+        assertEquals ("AUW is 12100", 12100.0 , thisAircraft.getAllUpWeight(), 0.01);
 
         // Find ammout of fuel used going 400nm at 440kts
         thisAircraft.aircraftLeg(440.0, 400.0);
-        assertTrue("1161kg fuel used", compareWithinTwoDecPlace(1161.81, thisAircraft.getFuelUsed()));
+        assertEquals("1161kg fuel used", 1161.81, thisAircraft.getFuelUsed(), 0.01);
 
         // Find ammout of fuel used going 200nm at 440kts
         thisAircraft.aircraftLeg(440.0, 200.0);
-        assertTrue("542kg fuel used", compareWithinTwoDecPlace(542.72, thisAircraft.getFuelUsed()));
+        assertEquals("542kg fuel used", 542.72, thisAircraft.getFuelUsed(), 0.01);
     }
 
     @Test
@@ -103,22 +98,22 @@ public class AircraftManagementTests {
 
         // Climb to 20,000
         thisAircraft.climb(20000.0);
-        assertTrue("200kg fuel used", compareWithinTwoDecPlace(200.0, thisAircraft.getFuelUsed()));
+        assertEquals("200kg fuel used", 200.0, thisAircraft.getFuelUsed(), 0.01);
 
         // Cruise to Palmerston North at 400 kts, should use 265.5kg fuel
         thisAircraft.aircraftLeg(400.0, 75.0);
-        assertTrue("182.25kg fuel used", compareWithinTwoDecPlace(182.25, thisAircraft.getFuelUsed()));
+        assertEquals("182.25kg fuel used", 182.25, thisAircraft.getFuelUsed(), 0.01);
 
         // Descend to 200ft, travel 86nm to Waioru at 600kts, and will use 626.94 kg of fuel
         thisAircraft.dive(200.0);
         thisAircraft.aircraftLeg(600.0, 86.0);
-        assertTrue("626.94kg fuel used", compareWithinTwoDecPlace(626.94, thisAircraft.getFuelUsed()));
+        assertEquals("626.94kg fuel used", 626.94, thisAircraft.getFuelUsed(), 0.01);
 
         // Drop bombs
         // Climb to 1000 ft - should use 8 kg fuel
         thisAircraft.dropDumbBomb(4);
         thisAircraft.climb(1000.0);
-        assertTrue("8kg fuel used", compareWithinTwoDecPlace(8.0, thisAircraft.getFuelUsed()));
+        assertEquals("8kg fuel used", 8.0, thisAircraft.getFuelUsed(), 0.01);
 
         // Fly to Wanganui, 500kts, 57nm
         thisAircraft.aircraftLeg(500.0, 57.0);
@@ -134,19 +129,4 @@ public class AircraftManagementTests {
         thisAircraft.aircraftLeg(500.0, 1188.0);
     }
 
-    @Test
-    public void readValidDataLine () {
-        String dataStr = "|32000.0| 400.0| 9000.0| 7.3|";
-        FuelRateData fuelData = new FuelRateData(dataStr);
-        
-        assertTrue("Fuel data provided processed", fuelData.getValidData());
-    }
-    
-    @Test
-    public void rejectInvalidDataLine () {
-        String dataStr = "|32000.0| 400.0| 9000.0| 7.3|23.2|";
-        FuelRateData fuelData = new FuelRateData(dataStr);
-        
-        assertFalse("Incorrect fuel data rejected", fuelData.getValidData());
-    }
 }
