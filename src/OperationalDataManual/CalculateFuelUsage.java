@@ -100,7 +100,6 @@ public class CalculateFuelUsage {
                     System.out.println("ERROR - fuel_data file corrupt");
                     System.exit(0);
                 }
-
             }
             fileReader.close();
             //System.out.println("Contents of file:");
