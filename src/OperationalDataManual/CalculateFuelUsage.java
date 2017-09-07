@@ -103,8 +103,8 @@ public class CalculateFuelUsage {
 
             }
             fileReader.close();
-            System.out.println("Contents of file:");
-            System.out.println(stringBuffer.toString());
+            //System.out.println("Contents of file:");
+            //System.out.println(stringBuffer.toString());
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("ERROR - fuel_data file not found");
